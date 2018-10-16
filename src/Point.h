@@ -1,7 +1,7 @@
 #ifndef POINT_H
 #define POINT_H
 
-#include <cstdint>
+#include <stdint.h>
 
 namespace Codingfield {
   namespace UI {

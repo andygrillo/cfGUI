@@ -1,7 +1,7 @@
 #ifndef SIZE_H
 #define SIZE_H
 
-#include <cstdint>
+#include <stdint.h>
 
 namespace Codingfield {
   namespace UI {
