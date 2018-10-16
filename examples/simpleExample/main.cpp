@@ -77,7 +77,7 @@ void setup() {
 
   // Callback called by the mosaic when it changes mode (mosaic/zoom on 1 widget)
   // We use it to update the bottom bar.
-  mosaic->SetZoomOnSelectedCallback([bottomBar](Widget* widget, bool edit) {
+  mosaic->SetZoomOnSelectedCallback([](Widget* widget, bool edit) {
     if(edit) {
       if(widget->IsEditable()){
         bottomBar->SetButtonAText("-");
@@ -97,7 +97,7 @@ void setup() {
 
   // Configure callback to be called when the user wants to increment the value
   // of button2
-  button2->SetUpCallback([&editButtonValue](UpDownButton* w) {
+  button2->SetUpCallback([](UpDownButton* w) {
     editButtonValue++;
     w->SetText(String(editButtonValue).c_str());
     return true;
@@ -105,7 +105,7 @@ void setup() {
 
   // Configure callback to be called when the user wants to decrement the value
   // of button2
-  button2->SetDownCallback([&editButtonValue](UpDownButton* w) {
+  button2->SetDownCallback([](UpDownButton* w) {
     editButtonValue--;
     w->SetText(String(editButtonValue).c_str());
     return true;
@@ -113,14 +113,14 @@ void setup() {
 
   // Configure callback to be called when the user wants to apply the value
   // of button2
-  button2->SetApplyCallback([&editButtonValue, &editOldButtonValue](UpDownButton* w) {
+  button2->SetApplyCallback([](UpDownButton* w) {
     editOldButtonValue = editButtonValue;
     return false;
   });
 
   // Configure callback to be called when the user wants to cancel modification
   // of the value of button2
-  button2->SetCancelCallback([&editButtonValue](UpDownButton* w) {
+  button2->SetCancelCallback([](UpDownButton* w) {
     editButtonValue = editOldButtonValue;
     w->SetText(String(editButtonValue).c_str());
     return true;
