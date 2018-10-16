@@ -1,4 +1,5 @@
-#pragma once
+#ifndef APPSCREEN_H
+#define APPSCREEN_H
 
 #include <Screen.h>
 
@@ -24,3 +25,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //APPSCREEN_H

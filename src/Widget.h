@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WIDGET_H
+#define WIDGET_H
 
 #include "Point.h"
 #include "Size.h"
@@ -75,3 +76,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //WIDGET_H

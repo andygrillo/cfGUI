@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SCREEN_H
+#define SCREEN_H
 
 #include "Widget.h"
 
@@ -13,3 +14,4 @@ namespace Codingfield {
     };
   }
 }
+#endif //SCREEN_H

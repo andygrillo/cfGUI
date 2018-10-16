@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UPDOWNBUTTON_H
+#define UPDOWNBUTTON_H
 
 #include "Button.h"
 
@@ -34,3 +35,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //UPDOWNBUTTON_H

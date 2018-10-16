@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SIZE_H
+#define SIZE_H
+
 #include <cstdint>
 
 namespace Codingfield {
@@ -11,3 +13,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //SIZE_H

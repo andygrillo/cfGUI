@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STATUSBAR_H
+#define STATUSBAR_H
 
 #include "Bar.h"
 
@@ -22,3 +23,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //STATUSBAR_H

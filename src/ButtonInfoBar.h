@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BUTTONINFOBAR_H
+#define BUTTONINFOBAR_H
 
 #include "Bar.h"
 
@@ -20,3 +21,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //BUTTONINFOBAR_H

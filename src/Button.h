@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BUTTON_H
+#define BUTTON_H
 
 #include "Widget.h"
 
@@ -23,3 +24,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //BUTTON_H

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WIDGETMOSAIC_H
+#define WIDGETMOSAIC_H
 
 #include "Widget.h"
 #include "Point.h"
@@ -34,3 +35,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //WIDGETMOSAIC_H

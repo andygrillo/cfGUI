@@ -1,4 +1,6 @@
-#pragma once
+#ifndef POINT_H
+#define POINT_H
+
 #include <cstdint>
 
 namespace Codingfield {
@@ -11,3 +13,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //POINT_H

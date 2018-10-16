@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BAR_H
+#define BAR_H
 
 #include "Widget.h"
 
@@ -14,3 +15,5 @@ namespace Codingfield {
     };
   }
 }
+
+#endif //BAR_H
