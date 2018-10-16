@@ -37,8 +37,12 @@ void StatusBar::Draw() {
     M5.Lcd.setTextColor(BLACK);
 
     M5.Lcd.setTextDatum(TL_DATUM);
-    String s = String("UP:") + String(uptime) + String("h");
-    M5.Lcd.drawString(s.c_str(), 1, 5);
+
+    char uptime_printed[16];
+
+    snprintf(uptime_printed, sizeof(uptime_printed), "UP: %ih", uptime);
+
+    M5.Lcd.drawString(uptime_printed, 1, 5);
 
     M5.Lcd.setTextDatum(TC_DATUM);
     M5.Lcd.drawString(dateTime.c_str(), 160, 5);
