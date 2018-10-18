@@ -1,4 +1,5 @@
 #include "WidgetMosaic.h"
+
 using namespace Codingfield::UI;
 
 WidgetMosaic::WidgetMosaic(Widget* parent, Point position, Size size, int32_t nbColumns, int32_t nbRows) : Widget(parent, position, size),
@@ -18,8 +19,9 @@ void WidgetMosaic::Draw() {
   }
 
   if(!zoomOnSelected) {
-    for(Widget* w : children)
+    for(Widget* w : children) {
       w->Draw();
+    }
   }
   else {
     selectedWidget->Draw();
@@ -36,6 +38,9 @@ void WidgetMosaic::AddChild(Widget* widget) {
 
   int32_t position = ((children.size()-1) % (nbRows*nbColumns));
   widget->SetPosition(ComputeWidgetPosition(widgetSize, position));
+
+  UpdateChildrenVisibility();
+
   SetUpdateFlag();
 }
 
@@ -56,7 +61,7 @@ void WidgetMosaic::ZoomOnSelected(bool enabled) {
   }  else {
     zoomOnSelected = false;
 
-    for(auto index = 0; index < children.size(); index++) {
+    for(auto index = 0; index < children.size(); ++index) {
       Widget* widget = children.at(index);
       Size widgetSize = ComputeWidgetSize();
       widget->SetSize(widgetSize);
@@ -77,12 +82,7 @@ void WidgetMosaic::OnButtonAPressed() {
   if(zoomOnSelected)
     return selectedWidget->OnButtonAPressed();
 
-  if(indexSelected > 0) {
-    children[indexSelected]->SetSelected(false);
-    indexSelected--;
-    children[indexSelected]->SetSelected(true);
-    selectedWidget = children[indexSelected];
-  }
+  DecrementIndexSelected();
 }
 
 void WidgetMosaic::OnButtonBPressed() {
@@ -105,12 +105,52 @@ void WidgetMosaic::OnButtonCPressed() {
   if(zoomOnSelected)
     return selectedWidget->OnButtonCPressed();
 
+  IncrementIndexSelected();
+}
+
+void WidgetMosaic::IncrementIndexSelected() {
   if(indexSelected < children.size()-1) {
     children[indexSelected]->SetSelected(false);
-    indexSelected++;
+    ++indexSelected;
     children[indexSelected]->SetSelected(true);
     selectedWidget = children[indexSelected];
   }
+
+  if(!IsOnPage(indexSelected, pageSelected)) {
+    pageSelected = indexSelected / (nbRows*nbColumns);
+    UpdateChildrenVisibility();
+    SetUpdateFlag();
+  }
+}
+
+void WidgetMosaic::DecrementIndexSelected() {
+  if(indexSelected > 0) {
+    children[indexSelected]->SetSelected(false);
+    indexSelected--;
+    children[indexSelected]->SetSelected(true);
+    selectedWidget = children[indexSelected];
+  }
+
+  if(!IsOnPage(indexSelected, pageSelected)) {
+    pageSelected = indexSelected / (nbRows*nbColumns);
+    UpdateChildrenVisibility();
+    SetUpdateFlag();
+  }
+}
+
+void WidgetMosaic::UpdateChildrenVisibility() {
+  for(auto index = 0; index < children.size(); ++index) {
+    if (IsOnPage(index, pageSelected)) {
+      children.at(index)->Show();
+    }
+    else {
+      children.at(index)->Hide();
+    }
+  }
+}
+
+bool WidgetMosaic::IsOnPage(uint32_t index, uint32_t page) {
+  return ((index / (nbRows*nbColumns)) == page);
 }
 
 Size WidgetMosaic::ComputeWidgetSize() {
@@ -127,7 +167,7 @@ Size WidgetMosaic::ComputeWidgetSize(int32_t nbColumns, int32_t nbRows) {
 Point WidgetMosaic::ComputeWidgetPosition(const Size& widgetSize, int32_t position) {
   Point widgetPosition;
 
-  int32_t row = ((int32_t)position / (int32_t)nbColumns);
+  int32_t row = ((int32_t)position / (int32_t)nbColumns) % nbRows;
   int32_t column = position % nbColumns;
   widgetPosition.x = ((column)*border) + (column * widgetSize.width) + this->position.x;
   widgetPosition.y = ((row)*border) + (row * widgetSize.height) + this->position.y;

@@ -21,9 +21,15 @@ namespace Codingfield {
       void SetZoomOnSelectedCallback(std::function<void (Widget* widget, bool)> func);
     private:
       int32_t indexSelected = 0;
+      int32_t pageSelected = 0;
       int32_t border = 5;
       int32_t nbRows;
       int32_t nbColumns;
+
+      void IncrementIndexSelected();
+      void DecrementIndexSelected();
+      void UpdateChildrenVisibility();
+      inline bool IsOnPage(uint32_t index, uint32_t page);
 
       Size ComputeWidgetSize();
       Size ComputeWidgetSize(int32_t nbColumns, int32_t nbRows);
