@@ -1,7 +1,6 @@
 #include <M5Stack.h>
 #include <WiFi.h>
 
-#include <NTPClient.h>
 #include <Screen.h>
 #include <ButtonInfoBar.h>
 #include <StatusBar.h>
@@ -9,8 +8,6 @@
 #include <WidgetMosaic.h>
 #include <string>
 #include <vector>
-#include <time.h>
-#include <sys/time.h>
 #include <AppScreen.h>
 #include <UpDownButton.h>
 
