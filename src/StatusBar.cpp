@@ -57,7 +57,7 @@ void StatusBar::Draw() {
         wifibmp = image_data_wifi0;
         break;
     }
-    M5.Lcd.drawBitmap(295,0, wifibmp, 25,25, BLACK);
+    M5.Lcd.drawXBitmap(295,0, wifibmp, 25,25, BLACK);
   }
   isUpdated = false;
 }
