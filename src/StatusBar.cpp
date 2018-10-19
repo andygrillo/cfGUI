@@ -2,10 +2,10 @@
 
 using namespace Codingfield::UI;
 
-extern const uint8_t image_data_wifi0[];
-extern const uint8_t image_data_wifi1[];
-extern const uint8_t image_data_wifi2[];
-extern const uint8_t image_data_wifi3[];
+#include "ressources/wifi0.xbm"
+#include "ressources/wifi1.xbm"
+#include "ressources/wifi2.xbm"
+#include "ressources/wifi3.xbm"
 
 void StatusBar::SetWifiStatus(const StatusBar::WifiStatuses status) {
   if(wifiStatus != status) {
@@ -47,14 +47,14 @@ void StatusBar::Draw() {
     M5.Lcd.setTextDatum(TC_DATUM);
     M5.Lcd.drawString(dateTime.c_str(), 160, 5);
 
-    const uint8_t* wifibmp = image_data_wifi0;
+    const uint8_t* wifibmp = wifi0_bits;
     switch(wifiStatus) {
-      case WifiStatuses::Weak: wifibmp = image_data_wifi1; break;
-      case WifiStatuses::Medium: wifibmp = image_data_wifi2; break;
-      case WifiStatuses::Full: wifibmp = image_data_wifi3; break;
+      case WifiStatuses::Weak: wifibmp = wifi1_bits; break;
+      case WifiStatuses::Medium: wifibmp = wifi2_bits; break;
+      case WifiStatuses::Full: wifibmp = wifi3_bits; break;
       default:
       case WifiStatuses::No_signal:
-        wifibmp = image_data_wifi0;
+        wifibmp = wifi0_bits;
         break;
     }
     M5.Lcd.drawXBitmap(295,0, wifibmp, 25,25, BLACK);
