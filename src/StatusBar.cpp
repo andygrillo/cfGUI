@@ -2,10 +2,14 @@
 
 using namespace Codingfield::UI;
 
-#include "ressources/wifi0.xbm"
-#include "ressources/wifi1.xbm"
-#include "ressources/wifi2.xbm"
-#include "ressources/wifi3.xbm"
+#include "ressources/wifi_full.xbm"
+#include "ressources/wifi_medium.xbm"
+#include "ressources/wifi_weak.xbm"
+#include "ressources/wifi_none.xbm"
+#include "ressources/wifi_off.xbm"
+#include "ressources/wifi_warn.xbm"
+#include "ressources/wifi_warn_filled.xbm"
+
 
 void StatusBar::SetWifiStatus(const StatusBar::WifiStatuses status) {
   if(wifiStatus != status) {
@@ -47,14 +51,17 @@ void StatusBar::Draw() {
     M5.Lcd.setTextDatum(TC_DATUM);
     M5.Lcd.drawString(dateTime.c_str(), 160, 5);
 
-    const uint8_t* wifibmp = wifi0_bits;
+    const uint8_t* wifibmp;
     switch(wifiStatus) {
-      case WifiStatuses::Weak: wifibmp = wifi1_bits; break;
-      case WifiStatuses::Medium: wifibmp = wifi2_bits; break;
-      case WifiStatuses::Full: wifibmp = wifi3_bits; break;
+      case WifiStatuses::Weak: wifibmp = wifi_weak_bits; break;
+      case WifiStatuses::Medium: wifibmp = wifi_medium_bits; break;
+      case WifiStatuses::Full: wifibmp = wifi_full_bits; break;
+      case WifiStatuses::Warning: wifibmp = wifi_warn_bits; break;
+      case WifiStatuses::WarningFilled: wifibmp = wifi_warn_filled_bits; break;
+      case WifiStatuses::Off: wifibmp = wifi_off_bits; break;
       default:
       case WifiStatuses::No_signal:
-        wifibmp = wifi0_bits;
+        wifibmp = wifi_none_bits;
         break;
     }
     M5.Lcd.drawXBitmap(295,0, wifibmp, 25,25, BLACK);
