@@ -16,8 +16,11 @@ namespace Codingfield {
     private:
       Color color = WHITE;
       std::string btnAText;
+      std::string oldBtnAText;
       std::string btnBText;
+      std::string oldBtnBText;
       std::string btnCText;
+      std::string oldBtnCText;
     };
   }
 }

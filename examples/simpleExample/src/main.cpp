@@ -10,6 +10,8 @@
 #include <vector>
 #include <AppScreen.h>
 #include <UpDownButton.h>
+#include <WiFi.h>
+
 
 using namespace Codingfield::UI;
 AppScreen* screen;
