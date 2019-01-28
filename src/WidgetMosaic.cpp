@@ -1,5 +1,4 @@
 #include "WidgetMosaic.h"
-
 using namespace Codingfield::UI;
 
 WidgetMosaic::WidgetMosaic(Widget* parent, Point position, Size size, int32_t nbColumns, int32_t nbRows) : Widget(parent, position, size),
@@ -14,20 +13,14 @@ WidgetMosaic::WidgetMosaic(int32_t nbColumns, int32_t nbRows) : WidgetMosaic(nul
 
 void WidgetMosaic::Draw() {
   if(IsHidden()) return;
-  if(isUpdated) {
+  if(isInvalidated) {
     M5.Lcd.fillRect(position.x, position.y, size.width, size.height, BLACK);
   }
 
-  if(!zoomOnSelected) {
-    for(Widget* w : children) {
-      w->Draw();
-    }
-  }
-  else {
-    selectedWidget->Draw();
-  }
+  for(Widget* w : children)
+    w->Draw();
 
-  isUpdated = false;
+  isInvalidated = false;
 }
 
 void WidgetMosaic::AddChild(Widget* widget) {
@@ -40,8 +33,7 @@ void WidgetMosaic::AddChild(Widget* widget) {
   widget->SetPosition(ComputeWidgetPosition(widgetSize, position));
 
   UpdateChildrenVisibility();
-
-  SetUpdateFlag();
+  Invalidate();
 }
 
 const Widget* WidgetMosaic::GetSelected() const {
@@ -51,10 +43,15 @@ const Widget* WidgetMosaic::GetSelected() const {
 void WidgetMosaic::ZoomOnSelected(bool enabled) {
   bool oldValue = zoomOnSelected;
   if(selectedWidget != nullptr && enabled) {
+    for(auto* w : children)
+      w->Hide();
+
     zoomOnSelected = true;
     Size widgetSize = ComputeWidgetSize(1,1);
     selectedWidget->SetSize(widgetSize);
     selectedWidget->SetPosition(ComputeWidgetPosition(widgetSize, 0));
+    selectedWidget->Show();
+    selectedWidget->Invalidate();
     if(selectedWidget->IsEditable()) {
       selectedWidget->EnableControls();
     }
@@ -66,15 +63,18 @@ void WidgetMosaic::ZoomOnSelected(bool enabled) {
       Size widgetSize = ComputeWidgetSize();
       widget->SetSize(widgetSize);
       widget->SetPosition(ComputeWidgetPosition(widgetSize, index));
+      if (IsOnPage(index, this->pageSelected)) {
+        widget->Show();
+      }
       if(selectedWidget->IsEditable()) {
         selectedWidget->DisableControls();
       }
     }
   }
 
-  if(oldValue != zoomOnSelected) {
+  if(selectedWidget != nullptr && oldValue != zoomOnSelected) {
     zoomOnSelectedCallback(selectedWidget, zoomOnSelected);
-    SetUpdateFlag();
+    Invalidate();
   }
 }
 
@@ -86,6 +86,7 @@ void WidgetMosaic::OnButtonAPressed() {
 }
 
 void WidgetMosaic::OnButtonBPressed() {
+  if(selectedWidget == nullptr) return;
   if(zoomOnSelected) {
     ZoomOnSelected(false);
     selectedWidget->OnButtonBPressed();
@@ -119,7 +120,7 @@ void WidgetMosaic::IncrementIndexSelected() {
   if(!IsOnPage(indexSelected, pageSelected)) {
     pageSelected = indexSelected / (nbRows*nbColumns);
     UpdateChildrenVisibility();
-    SetUpdateFlag();
+    Invalidate();
   }
 }
 
@@ -134,7 +135,7 @@ void WidgetMosaic::DecrementIndexSelected() {
   if(!IsOnPage(indexSelected, pageSelected)) {
     pageSelected = indexSelected / (nbRows*nbColumns);
     UpdateChildrenVisibility();
-    SetUpdateFlag();
+    Invalidate();
   }
 }
 

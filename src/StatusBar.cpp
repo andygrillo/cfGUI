@@ -13,44 +13,31 @@ using namespace Codingfield::UI;
 
 void StatusBar::SetWifiStatus(const StatusBar::WifiStatuses status) {
   if(wifiStatus != status) {
+    oldWifiStatus = wifiStatus;
     wifiStatus = status;
-    SetUpdateFlag();
   }
 }
 
 void StatusBar::SetUptime(const uint32_t t) {
   if(uptime != t) {
+    oldUptime = uptime;
     uptime = t;
-    SetUpdateFlag();
   }
 }
 
 void StatusBar::SetDateTime(const std::string& t) {
   if(dateTime != t) {
+    oldDateTime = dateTime;
     dateTime = t;
-    SetUpdateFlag();
   }
 }
 
 void StatusBar::Draw() {
   if(IsHidden()) return;
-  bool oldIsUpdated = isUpdated;
+  bool wasInvalidated = isInvalidated;
   Bar::Draw();
 
-  if(oldIsUpdated) {
-    M5.Lcd.setTextColor(BLACK);
-
-    M5.Lcd.setTextDatum(TL_DATUM);
-
-    char uptime_printed[16];
-
-    snprintf(uptime_printed, sizeof(uptime_printed), "UP: %ih", uptime);
-
-    M5.Lcd.drawString(uptime_printed, 1, 5);
-
-    M5.Lcd.setTextDatum(TC_DATUM);
-    M5.Lcd.drawString(dateTime.c_str(), 160, 5);
-
+  if(wasInvalidated || (wifiStatus != oldWifiStatus)) {
     const uint8_t* wifibmp;
     switch(wifiStatus) {
       case WifiStatuses::Weak: wifibmp = wifi_weak_bits; break;
@@ -65,6 +52,35 @@ void StatusBar::Draw() {
         break;
     }
     M5.Lcd.drawXBitmap(295,0, wifibmp, 25,25, BLACK);
+    oldWifiStatus = wifiStatus;
   }
-  isUpdated = false;
+
+  if(wasInvalidated || (oldDateTime != dateTime)) {
+    M5.Lcd.setTextDatum(TC_DATUM);
+
+    M5.Lcd.setTextColor(color);
+    M5.Lcd.drawString(oldDateTime.c_str(), 160, 5);
+
+    M5.Lcd.setTextColor(BLACK);
+    M5.Lcd.drawString(dateTime.c_str(), 160, 5);
+
+    oldDateTime = dateTime;
+  }
+
+  if(wasInvalidated || (oldUptime != uptime)) {
+    char uptime_printed[16];
+    const char* uptime_print_format = "UP: %ih";
+    M5.Lcd.setTextDatum(TL_DATUM);
+
+    M5.Lcd.setTextColor(color);
+    snprintf(uptime_printed, sizeof(uptime_printed), uptime_print_format, oldUptime);
+    M5.Lcd.drawString(uptime_printed, 1, 5);
+
+    M5.Lcd.setTextColor(BLACK);
+    snprintf(uptime_printed, sizeof(uptime_printed), uptime_print_format, uptime);
+    M5.Lcd.drawString(uptime_printed, 1, 5);
+
+    oldUptime = uptime;
+  }
+  isInvalidated = false;
 }
